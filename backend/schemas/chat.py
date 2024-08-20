@@ -2,6 +2,19 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional, Any
 
 
+class AddChatModel(BaseModel):
+    message: str
+    userId: str
+
+    class Collection:
+        name = "chat"
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "message": "test message",
+            }
+        }
+
 class UpdateChatModel(BaseModel):
     message: Optional[str]
 

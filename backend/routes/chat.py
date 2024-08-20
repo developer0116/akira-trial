@@ -1,27 +1,16 @@
 from fastapi import APIRouter, Body
-
+import random
 from database.database import *
 from models.chat import Chat
-from schemas.chat import Response, UpdateChatModel
+from schemas.chat import Response, UpdateChatModel, AddChatModel
 
 
 router = APIRouter()
 
 
-@router.get("/", response_description="Chats retrieved", response_model=Response)
-async def get_chats():
-    chats = await retrieve_chats()
-    return {
-        "status_code": 200,
-        "response_type": "success",
-        "description": "Chats data retrieved successfully",
-        "data": chats,
-    }
-
-
 @router.get("/{id}", response_description="Chat data retrieved", response_model=Response)
-async def get_chat_data(id: PydanticObjectId):
-    chat = await retrieve_chat(id)
+async def get_chat_data(id: str):
+    chat = await retrieve_chats(id)
     if chat:
         return {
             "status_code": 200,
@@ -42,7 +31,30 @@ async def get_chat_data(id: PydanticObjectId):
     response_model=Response,
 )
 async def add_chat_data(chat: Chat = Body(...)):
+
     new_chat = await add_chat(chat)
+    mock_response= [
+        {
+            "message": "Amazing how Mosey is simplifying state compliance for business across the board!",
+            "actions": [ "Create Report this month", "Call Lead"],
+            "sender": 'bot',
+            "userId": str(new_chat.userId)
+        },
+        {
+            "message": "Amazing how Mosey is simplifying state compliance for business across the board!",
+            "actions": None,
+            "sender": 'bot',
+            "userId": str(new_chat.userId)
+        },
+        {
+            "message": "Ask me anything or pick place to start a conversation.",
+            "actions": [ "Schedule a call"],
+            "sender": 'bot',
+            "userId": str(new_chat.userId)
+        },
+    ]
+    random_chat = random.choice(mock_response)
+    new_chat = await add_chat(Chat(**random_chat))
     return {
         "status_code": 200,
         "response_type": "success",
