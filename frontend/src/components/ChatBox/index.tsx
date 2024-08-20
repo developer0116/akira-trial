@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import img from "assets/react.svg";
 import closeImg from "assets/img/close.svg";
 import expandImg from "assets/img/expand.svg";
@@ -13,17 +13,19 @@ import { useQuery, useMutation } from "react-query";
 import { Chat } from "types";
 import { ChatMessage } from "components";
 import { isAxiosError } from "axios";
-import { Element, animateScroll as scroll } from "react-scroll";
 
 export const ChatBox = () => {
   const [widgetSize, setWidgetSize] = useState<
     "normal" | "expanded" | "docked" | "closed"
   >("closed");
   const [editingChat, setEditingChat] = useState<Chat>();
+  const [deletingChat, setDeletingChat] = useState<Chat>();
   const { userInfo } = useAuth();
   const [chatData, setChatData] = useState<Chat[]>([]);
   const [error, setError] = useState("");
   const [chatInput, setChatInput] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const { isLoading } = useQuery(
     ["chats", userInfo?.userId],
     () => getAllChats(userInfo?.userId as string),
@@ -32,7 +34,6 @@ export const ChatBox = () => {
       enabled: !!userInfo?.userId,
       onSuccess: (data) => {
         setChatData(data.data);
-        scrollToChatBottom();
       },
       onError: (error) => {
         if (isAxiosError(error)) {
@@ -51,6 +52,7 @@ export const ChatBox = () => {
           data.data.user_chat,
           data.data.bot_chat,
         ]);
+
         scrollToChatBottom();
       },
       onError: (error) => {
@@ -61,8 +63,7 @@ export const ChatBox = () => {
     }
   );
   const { mutate: updateChatMsg } = useMutation(
-    async (data: { chatId: string; message: string }) =>
-      await updateChatById(data),
+    async (data: Chat) => await updateChatById(data),
     {
       onSuccess: (data) => {
         setChatData((prevChats) =>
@@ -107,21 +108,25 @@ export const ChatBox = () => {
         userId: userInfo?.userId as string,
       },
     ]);
+
+    scrollToChatBottom();
     sendChatMsg({ userId: userInfo?.userId as string, message: msg });
   };
 
+  const handleActionClick = (chat: Chat, action: string) => {
+    handleAddChat(action);
+    updateChatMsg({ ...chat, actions: [] });
+  };
+
   const scrollToChatBottom = () => {
-    scroll.scrollToBottom({
-      behavior: "smooth",
-      containerId: "chat-content",
-      to: "content-bottom",
-    });
+    if (contentRef.current) {
+      contentRef.current.scrollIntoView();
+    }
   };
 
   const handleChatSendClick = () => {
     if (editingChat) {
-      updateChatMsg({ chatId: editingChat._id, message: chatInput });
-      setEditingChat(undefined);
+      updateChatMsg({ ...editingChat, message: chatInput });
     } else {
       handleAddChat(chatInput);
     }
@@ -135,19 +140,32 @@ export const ChatBox = () => {
   };
   const handleDeleteChat = (chat: Chat) => {
     deleteChatMsg(chat._id);
+    setDeletingChat(chat);
   };
   const handleEditChat = (chat: Chat) => {
     setEditingChat(chat);
     setChatInput(chat.message);
+    if (inputRef.current) {
+      inputRef.current?.focus();
+    }
   };
 
   useEffect(() => {
     if (widgetSize !== "closed") {
-      scrollToChatBottom();
+      if (!editingChat && !deletingChat) {
+        scrollToChatBottom();
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      } else {
+        setEditingChat(undefined);
+        setDeletingChat(undefined);
+      }
     }
 
     return () => {};
-  }, [widgetSize]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [widgetSize, chatData]);
 
   return (
     <div className="chat-container">
@@ -205,7 +223,7 @@ export const ChatBox = () => {
                 <ChatMessage
                   key={`chat${index}`}
                   data={data}
-                  onClickAction={(msg) => handleAddChat(msg)}
+                  onClickAction={(msg) => handleActionClick(data, msg)}
                   onDelete={() => handleDeleteChat(data)}
                   onEdit={() => handleEditChat(data)}
                 />
@@ -237,7 +255,8 @@ export const ChatBox = () => {
                 Error: {error}
               </div>
             )}
-            <Element name="content-bottom" className="element"></Element>
+
+            <div ref={contentRef}></div>
           </div>
           <div className="flex gap-2 items-center h-14 mb-2 border-t border-gray-200 pt-2">
             <img
@@ -246,6 +265,7 @@ export const ChatBox = () => {
               alt="Rounded avatar"
             />
             <input
+              ref={inputRef}
               type="text"
               id="small-input"
               placeholder="Your question"

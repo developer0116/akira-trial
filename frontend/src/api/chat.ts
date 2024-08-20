@@ -1,4 +1,5 @@
 import { API } from "utils/api";
+import { Chat } from "types";
 
 /* Fetch all chats by user id */
 export const getAllChats = async (userId: string) => {
@@ -7,13 +8,8 @@ export const getAllChats = async (userId: string) => {
 };
 
 /* Update chat by id */
-export const updateChatById = async (data: {
-  chatId: string;
-  message: string;
-}) => {
-  const response = await API().put(`chat/${data.chatId}`, {
-    message: data.message,
-  });
+export const updateChatById = async (data: Chat) => {
+  const response = await API().put(`chat/${data._id}`, data);
   return response.data;
 };
 
