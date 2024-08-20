@@ -32,34 +32,35 @@ async def get_chat_data(id: str):
 )
 async def add_chat_data(chat: Chat = Body(...)):
 
-    new_chat = await add_chat(chat)
+    user_chat = await add_chat(chat)
     mock_response= [
         {
             "message": "Amazing how Mosey is simplifying state compliance for business across the board!",
             "actions": [ "Create Report this month", "Call Lead"],
             "sender": 'bot',
-            "userId": str(new_chat.userId)
+            "userId": str(user_chat.userId)
         },
         {
             "message": "Amazing how Mosey is simplifying state compliance for business across the board!",
             "actions": None,
             "sender": 'bot',
-            "userId": str(new_chat.userId)
+            "userId": str(user_chat.userId)
         },
         {
             "message": "Ask me anything or pick place to start a conversation.",
             "actions": [ "Schedule a call"],
             "sender": 'bot',
-            "userId": str(new_chat.userId)
+            "userId": str(user_chat.userId)
         },
     ]
     random_chat = random.choice(mock_response)
-    new_chat = await add_chat(Chat(**random_chat))
+    bot_chat = await add_chat(Chat(**random_chat))
     return {
         "status_code": 200,
         "response_type": "success",
         "description": "Chat created successfully",
-        "data": new_chat,
+        "user_chat": user_chat,
+        "bot_chat": bot_chat,
     }
 
 
