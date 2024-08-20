@@ -3,10 +3,11 @@ import { Routes, Route } from "react-router-dom";
 import { LoginPage, HomePage, NotFoundPage } from "pages";
 import { HomeLayout } from "layouts";
 import { PrivateRoutes } from "components";
+import { AuthProvider } from "contexts";
 
 function App() {
   return (
-    <div>
+    <AuthProvider>
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="*" element={<NotFoundPage />} />
@@ -16,7 +17,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
-    </div>
+    </AuthProvider>
   );
 }
 

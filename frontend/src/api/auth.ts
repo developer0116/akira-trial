@@ -1,5 +1,5 @@
 import { API } from "utils/api";
-import { LoginPayload, UserPayload } from "types";
+import { LoginPayload, SignupPayload } from "types";
 
 /* Login user */
 export const login = async (payload: LoginPayload) => {
@@ -11,7 +11,7 @@ export const login = async (payload: LoginPayload) => {
 };
 
 /* Signup user */
-export const signup = async (userPayload: UserPayload) => {
+export const signup = async (userPayload: SignupPayload) => {
   const response = await API({}, { Authorization: "" }).post(
     "user",
     userPayload

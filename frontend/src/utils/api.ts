@@ -27,7 +27,7 @@ const API = (opts = {}, optsHeader = {}) => {
   });
 
   axiosApi.interceptors.response.use(undefined, (error) => {
-    if (error.response?.status === 401) {
+    if ([401, 403].includes(error.response?.status)) {
       localStorage.removeItem("jwt");
       if (window.location.pathname !== "/") {
         window.location.href = `/?redirect=${window.location.href}`;

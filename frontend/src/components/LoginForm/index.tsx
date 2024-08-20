@@ -4,6 +4,7 @@ import * as yup from "yup";
 import { login } from "api";
 import { isAxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "contexts";
 
 interface Props {
   onNavigateToSignup: () => void;
@@ -12,6 +13,7 @@ interface Props {
 export const LoginForm = ({ onNavigateToSignup }: Props) => {
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
+  const { setUserInfo } = useAuth();
   const validationSchema = yup.object({
     email: yup
       .string()
@@ -33,9 +35,9 @@ export const LoginForm = ({ onNavigateToSignup }: Props) => {
       setErrorMsg("");
       try {
         const res = await login(values);
-        console.log("res", res);
-        if (res.access_token) {
-          localStorage.setItem("token", res.access_token);
+        if (res) {
+          localStorage.setItem("jwt", res.token);
+          setUserInfo({ ...res });
           navigate("/home");
         }
       } catch (error) {
