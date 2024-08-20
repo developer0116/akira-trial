@@ -1,0 +1,33 @@
+.chat-box {
+  position: fixed;
+  &__content {
+    scrollbar-color: #ddd transparent;
+    scrollbar-width: thin;
+  }
+  &.normal {
+    height: 640px;
+    width: 400px;
+    bottom: 20px;
+    right: 20px;
+  }
+  &.expanded {
+    height: 100vh;
+    width: 100vw;
+    bottom: 0;
+    right: 0;
+  }
+  &.docked {
+    height: 100vh;
+    width: 400px;
+    bottom: 0;
+    right: 0;
+  }
+}
+.chat-container {
+  z-index: 9;
+}
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
