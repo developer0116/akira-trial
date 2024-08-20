@@ -1,11 +1,18 @@
 import "./App.css";
-import { ChatBox } from "./components";
+import { Routes, Route } from "react-router-dom";
+import { LoginPage, HomePage, NotFoundPage } from "pages";
+import { HomeLayout } from "./layouts";
 
 function App() {
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <ChatBox />
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+        <Route path="home" element={<HomeLayout />}>
+          <Route index element={<HomePage />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
