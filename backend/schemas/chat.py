@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional, Any
+from typing import Optional, Any, List
 
 
 class AddChatModel(BaseModel):
@@ -16,7 +16,8 @@ class AddChatModel(BaseModel):
         }
 
 class UpdateChatModel(BaseModel):
-    message: Optional[str]
+    message: str
+    actions: Optional[List[str]]
 
     class Collection:
         name = "chat"

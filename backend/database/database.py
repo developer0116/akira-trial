@@ -32,7 +32,7 @@ async def delete_chat(id: PydanticObjectId) -> bool:
 
 
 async def update_chat_data(id: PydanticObjectId, data: dict) -> Union[bool, Chat]:
-    des_body = {k: v for k, v in data.items() if v is not None}
+    des_body = {k: v for k, v in data.items()}
     update_query = {"$set": {field: value for field, value in des_body.items()}}
     chat = await chat_collection.get(id)
     if chat:

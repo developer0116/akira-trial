@@ -59,8 +59,7 @@ async def add_chat_data(chat: Chat = Body(...)):
         "status_code": 200,
         "response_type": "success",
         "description": "Chat created successfully",
-        "user_chat": user_chat,
-        "bot_chat": bot_chat,
+        "data": { "user_chat": user_chat, "bot_chat": bot_chat },
     }
 
 
@@ -72,7 +71,7 @@ async def delete_chat_data(id: PydanticObjectId):
             "status_code": 200,
             "response_type": "success",
             "description": "Chat with ID: {} removed".format(id),
-            "data": deleted_chat,
+            "data": str(id),
         }
     return {
         "status_code": 404,
