@@ -1,11 +1,11 @@
 import { useState } from "react";
-import img from "../../assets/react.svg";
-import closeImg from "../../assets/img/close.svg";
-import expandImg from "../../assets/img/expand.svg";
-import dockImg from "../../assets/img/dock.svg";
-import sendImg from "../../assets/img/send.svg";
-import settingImg from "../../assets/img/settings.svg";
-import chatImg from "../../assets/img/chat.svg";
+import img from "assets/react.svg";
+import closeImg from "assets/img/close.svg";
+import expandImg from "assets/img/expand.svg";
+import dockImg from "assets/img/dock.svg";
+import sendImg from "assets/img/send.svg";
+import settingImg from "assets/img/settings.svg";
+import chatImg from "assets/img/chat.svg";
 import "./style.scss";
 
 export const ChatBox = () => {

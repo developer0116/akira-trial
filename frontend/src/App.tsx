@@ -1,7 +1,8 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { LoginPage, HomePage, NotFoundPage } from "pages";
-import { HomeLayout } from "./layouts";
+import { HomeLayout } from "layouts";
+import { PrivateRoutes } from "components";
 
 function App() {
   return (
@@ -9,8 +10,10 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="*" element={<NotFoundPage />} />
-        <Route path="home" element={<HomeLayout />}>
-          <Route index element={<HomePage />} />
+        <Route element={<PrivateRoutes />}>
+          <Route path="home" element={<HomeLayout />}>
+            <Route index element={<HomePage />} />
+          </Route>
         </Route>
       </Routes>
     </div>
