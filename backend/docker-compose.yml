@@ -1,0 +1,31 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - node-network
+    env_file:
+      - .env
+
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - dbdata:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - node-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  dbdata:
+
+networks:
+  node-network:
+    driver: bridge
