@@ -18,3 +18,10 @@ $ yarn
 $ yarn dev
 ```
 
+## Testing
+
+To run the tests, run the following command:
+
+```console
+$ yarn test
+```
