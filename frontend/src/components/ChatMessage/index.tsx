@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { Chat } from "types";
 import img from "assets/react.svg";
@@ -48,6 +49,7 @@ export const ChatMessage = ({
                   onClick={() => onClickAction(action)}
                   key={action}
                   type="button"
+                  role="action"
                   className="text-purple-700 w-fit hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-full text-xs px-4 py-2 text-center dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900"
                 >
                   {action}
@@ -69,7 +71,7 @@ export const ChatMessage = ({
           </div>
           <div className="relative">
             <button
-              id="dropdownMenuIconButton"
+              data-testid="chat-message-menu"
               data-dropdown-toggle="dropdownDots"
               data-dropdown-placement="bottom-start"
               className="inline-flex self-center items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100  focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-600"
@@ -91,7 +93,7 @@ export const ChatMessage = ({
             </button>
             {isMenuShown && (
               <div
-                id="dropdownDots"
+                role="menu"
                 className="z-10 absolute right-0 bg-white divide-y divide-gray-100 rounded-lg shadow w-40 dark:bg-gray-700 dark:divide-gray-600"
               >
                 <ul

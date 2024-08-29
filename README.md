@@ -1,10 +1,12 @@
 # Artisan Trial Project
 
+Author: Akira Ito
+
 ## How to run
 
 To run the project, follow these steps:
 
-Inside the /backend folder, please copy .env.sample to .env.
+Inside the /backend folder, please copy `.env.sample` file to `.env`.
 
 And then, go to the root folder and run this command.
 ```console
@@ -12,6 +14,11 @@ $ make up
 ```
 
 The app will run on http://localhost:3033
+
+To close the app, run this command.
+```console
+$ make down
+```
 
 ## Testing
 
