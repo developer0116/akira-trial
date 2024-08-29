@@ -1,8 +1,6 @@
-from fastapi.testclient import TestClient
 from httpx import AsyncClient
 import pytest
 from fastapi import status
-from app import app, token_listener
 from tests.conftest import mock_no_authentication
 
 test_user_signup = {

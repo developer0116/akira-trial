@@ -1,6 +1,3 @@
-import asyncio
-from beanie import init_beanie
-from fastapi.testclient import TestClient
 from httpx import AsyncClient
 import pytest
 
@@ -27,5 +24,4 @@ class TestMockAuthentication:
         ).create()
 
         response = client_test.get(f"chat/{str(user.id)}")
-        print("test mock db", response.json())
         assert response.status_code == 200
