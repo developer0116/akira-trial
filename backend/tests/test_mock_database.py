@@ -23,24 +23,9 @@ class TestMockAuthentication:
 
         await Chat(
             message="test",
-            userId=user.id,
+            userId=str(user.id),
         ).create()
 
-        response = await client_test.get("chat")
-
-        assert response.status_code == 200
-
-    @pytest.mark.anyio
-    async def test_mock_database(self, client_test: AsyncClient):
-        user = await User(
-            fullname="test user", email="test@test.com", password="test"
-        ).create()
-
-        await Chat(
-            message="test",
-            userId=user.id,
-        ).create()
-
-        response = await client_test.get("chat")
-
+        response = client_test.get(f"chat/{str(user.id)}")
+        print("test mock db", response.json())
         assert response.status_code == 200

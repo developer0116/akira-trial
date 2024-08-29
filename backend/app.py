@@ -32,4 +32,9 @@ async def read_root():
 
 
 app.include_router(UserRouter, tags=["User"], prefix="/user")
-app.include_router(ChatRouter,tags=["Chat"],prefix="/chat",dependencies=[Depends(token_listener)],)
+app.include_router(
+    ChatRouter,
+    tags=["Chat"],
+    prefix="/chat",
+    dependencies=[Depends(token_listener)],
+)
