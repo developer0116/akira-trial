@@ -1,0 +1,47 @@
+services:
+  backend:
+    image: artisan-trial-backend
+    container_name: artisan-trial-backend
+    build:
+      context: backend
+    ports:
+      - "8080:8080"
+    networks:
+      - node-network
+    env_file:
+      - ./backend/.env
+  frontend:
+    image: artisan-trial-frontend
+    container_name: artisan-trial-frontend
+    build:
+      context: frontend
+    ports:
+      - 3033:3033
+    stdin_open: true
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    networks:
+      - node-network
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - dbdata:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - node-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  dbdata:
+
+networks:
+  node-network:
+    driver: bridge
